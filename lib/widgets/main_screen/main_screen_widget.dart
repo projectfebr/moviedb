@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviedb/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
-  MainScreenWidget({Key? key}) : super(key: key);
+  const MainScreenWidget({Key? key}) : super(key: key);
 
   @override
   _MainScreenWidgetState createState() => _MainScreenWidgetState();
@@ -36,7 +36,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       ),
       body: IndexedStack(
         index: _selectedTab,
-        children: [
+        children: const [
           Text(
             'Новости',
           ),
@@ -48,7 +48,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Новости',

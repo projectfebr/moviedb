@@ -9,20 +9,20 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: const [
         _TopPosterWidget(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: _MovieNameWidget(),
         ),
         _SummaryWidget(),
         _ScoreWidget(),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _OverwievWidget(),
         ),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _DescriptionWidget(),
         ),
         SizedBox(height: 30),
@@ -44,7 +44,7 @@ class _ScoreWidget extends StatelessWidget {
         TextButton(
             onPressed: () {},
             child: Row(
-              children: [
+              children: const [
                 SizedBox(
                   width: 40,
                   height: 40,
@@ -69,7 +69,7 @@ class _ScoreWidget extends StatelessWidget {
         TextButton(
             onPressed: () {},
             child: Row(
-              children: [
+              children: const [
                 Icon(Icons.play_arrow),
                 Text('Play Trailer'),
               ],
@@ -121,7 +121,7 @@ class _TopPosterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: const [
         Image(image: AssetImage(AppImages.top_header)),
         Positioned(
             top: 20,
@@ -141,7 +141,7 @@ class _MovieNameWidget extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       maxLines: 3,
-      text: TextSpan(children: [
+      text: TextSpan(children: const [
         TextSpan(
           text: 'Tom Clancy without remote fgdfg dfgdgd dfgdg ',
           style: TextStyle(

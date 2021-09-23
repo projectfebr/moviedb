@@ -10,7 +10,7 @@ class RadialPercentWidget extends StatelessWidget {
   final Color freeColor;
   final double lineWidth;
 
-  RadialPercentWidget({
+  const RadialPercentWidget({
     Key? key,
     required this.child,
     required this.percent,

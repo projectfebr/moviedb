@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviedb/Theme/app_colors.dart';
+import 'package:moviedb/widgets/auth/auth_model.dart';
 import 'package:moviedb/widgets/auth/auth_widget.dart';
 import 'package:moviedb/widgets/main_screen/main_screen_widget.dart';
 import 'package:moviedb/widgets/movie_details/movie_details_widget.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/auth',
       routes: {
-        '/auth': (context) => AuthWidget(),
+        '/auth': (context) => AuthProvider(
+              child: const AuthWidget(),
+              model: AuthModel(),
+            ),
         '/main_screen': (context) => MainScreenWidget(),
         '/main_screen/movie_details': (context) {
           final arguments = ModalRoute.of(context)?.settings.arguments;
@@ -36,13 +40,13 @@ class MyApp extends StatelessWidget {
         },
       },
       // в onGenerateRoute можно проверять авторизован ли юзер. canPop() будет всегда true
-      onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(builder: (context) {
-          return Scaffold(
-            body: Center(child: Text('Ошибка навигации')),
-          );
-        });
-      },
+      // onGenerateRoute: (RouteSettings settings) {
+      //   return MaterialPageRoute(builder: (context) {
+      //     return Scaffold(
+      //       body: Center(child: Text('Ошибка навигации')),
+      //     );
+      //   });
+      // },
     );
   }
 }

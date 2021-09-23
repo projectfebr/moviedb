@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/widgets/movie_details/movie_details_main_info_widget.dart';
+import 'package:moviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
 
 class MoveDetailsWidget extends StatefulWidget {
   final int movieId;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/widgets/movie_list/movie_list_widget.dart';
+import 'package:moviedb/domain/data_providers/session_data_provider.dart';
+import 'package:moviedb/ui/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedTab = 0;
 
-  static final List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Новости',
     ),
@@ -32,19 +33,17 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TMDB'),
+        title: const Text('TMDB'),
+        actions: [
+          IconButton(
+            onPressed: () => SessionDataProvider().setSessionId(null),
+            icon: const Icon(Icons.logout_sharp),
+          )
+        ],
       ),
       body: IndexedStack(
         index: _selectedTab,
-        children: const [
-          Text(
-            'Новости',
-          ),
-          MovieListWidget(),
-          Text(
-            'Сериалы',
-          ),
-        ],
+        children: _widgetOptions,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,

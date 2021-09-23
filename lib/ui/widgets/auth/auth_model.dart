@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
+import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class AuthModel extends ChangeNotifier {
   final _apiCLient = ApiClient();
@@ -49,7 +50,8 @@ class AuthModel extends ChangeNotifier {
     //если все ок сохраняем sessionId
     await _sessionDataProvider.setSessionId(sessionId);
     //совершить переход после успещной авторизации
-    unawaited(Navigator.of(context).pushReplacementNamed('/main_screen'));
+    unawaited(Navigator.of(context)
+        .pushReplacementNamed(MainNavigationRouteNames.mainScreen));
   }
 }
 

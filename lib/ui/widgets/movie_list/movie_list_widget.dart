@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb/resources/resources.dart';
+import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class Movie {
   final int id;
@@ -84,7 +85,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
   void _onMoveTap(int index) {
     final id = _movies[index].id;
     Navigator.of(context)
-        .pushNamed('/main_screen/movie_details', arguments: id);
+        .pushNamed(MainNavigationRouteNames.movieDetails, arguments: id);
   }
 
   @override

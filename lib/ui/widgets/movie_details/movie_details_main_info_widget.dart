@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviedb/resources/resources.dart';
-import 'package:moviedb/widgets/elements/radial_percent_widget.dart';
+import 'package:moviedb/ui/widgets/elements/radial_percent_widget.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({Key? key}) : super(key: key);

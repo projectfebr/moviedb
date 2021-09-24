@@ -1,15 +1,18 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
+import 'package:moviedb/domain/entity/popular_movie_response.dart';
 import 'package:moviedb/ui/widgets/auth/auth_model.dart';
 
 class ApiClient {
   final _client = HttpClient();
 
   static const _host = 'https://api.themoviedb.org/3';
+  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = '038971d5d5edcdd1dd72e951b29c9614';
   // https://api.themoviedb.org/3/movie/76341?api_key=<<api_key>>
+
+  static String imageUrl(String path) => _imageUrl + path;
 
   Future<String> auth(
       {required String username, required String password}) async {
@@ -140,6 +143,26 @@ class ApiClient {
       parameters,
       parser,
       {'api_key': _apiKey},
+    );
+    return result;
+  }
+
+// Запрос на получение списка популярных фильмов
+  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+    PopularMovieResponse parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final popularMovieResponse = PopularMovieResponse.fromJson(jsonMap);
+      return popularMovieResponse;
+    }
+
+    final result = await _get<PopularMovieResponse>(
+      '/movie/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'language': locale,
+        'page': page.toString(),
+      },
     );
     return result;
   }

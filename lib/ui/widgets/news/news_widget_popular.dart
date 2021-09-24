@@ -57,7 +57,7 @@ class _NewsWidgetPopularState extends State<NewsWidgetPopular> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: const Image(
-                              image: AssetImage(AppImages.movie_placholder),
+                              image: AssetImage(AppImages.moviePlacholder),
                             ),
                           ),
                         ),

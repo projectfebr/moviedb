@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
-import 'package:moviedb/ui/widgets/main_screen/main_screen_model.dart';
 import 'package:moviedb/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:moviedb/ui/widgets/movie_list/movie_list_widget.dart';
 import 'package:moviedb/ui/widgets/news/news_widget.dart';
@@ -28,14 +27,13 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     movieListModel.setupLocale(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<MainScreenModel>(context);
+    // final model = NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('TMDB'),
@@ -52,7 +50,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           const NewsWidget(),
           NotifierProvider(
               model: movieListModel, child: const MovieListWidget()),
-          TWShowListWidget(),
+          const TWShowListWidget(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

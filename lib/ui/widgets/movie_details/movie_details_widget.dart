@@ -14,10 +14,10 @@ class _MoveDetailsWidgetState extends State<MoveDetailsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lucifer'),
+        title: const Text('Lucifer'),
       ),
       body: ColoredBox(
-        color: Color.fromRGBO(24, 23, 27, 1.0),
+        color: const Color.fromRGBO(24, 23, 27, 1.0),
         child: ListView(
           children: const [
             MovieDetailsMainInfoWidget(),

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/widgets/movie_list/movie_list_model.dart';

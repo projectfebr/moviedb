@@ -48,11 +48,11 @@ class ApiClient {
       final result = parser(json);
       return result;
     } on SocketException {
-      throw ApiClientException(ApiClientExceptionType.Network);
+      throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
     } catch (e) {
-      throw ApiClientException(ApiClientExceptionType.Other);
+      throw ApiClientException(ApiClientExceptionType.other);
     }
   }
 
@@ -76,11 +76,11 @@ class ApiClient {
       final result = parser(json);
       return result;
     } on SocketException {
-      throw ApiClientException(ApiClientExceptionType.Network);
+      throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
     } catch (e) {
-      throw ApiClientException(ApiClientExceptionType.Other);
+      throw ApiClientException(ApiClientExceptionType.other);
     }
   }
 
@@ -172,9 +172,9 @@ class ApiClient {
       final status = json['status_code'];
       final code = status is int ? status : 0;
       if (code == 30) {
-        throw ApiClientException(ApiClientExceptionType.Auth);
+        throw ApiClientException(ApiClientExceptionType.auth);
       } else {
-        throw ApiClientException(ApiClientExceptionType.Other);
+        throw ApiClientException(ApiClientExceptionType.other);
       }
     }
   }

@@ -28,10 +28,9 @@ class _NewsWidgetTrandingsState extends State<NewsWidgetTrandings> {
               DropdownButton<String>(
                 value: _catrgory,
                 onChanged: (catrgory) {},
-                items: [
-                  const DropdownMenuItem(value: 'today', child: Text('Today')),
-                  const DropdownMenuItem(
-                      value: 'week', child: Text('This Week')),
+                items: const [
+                  DropdownMenuItem(value: 'today', child: Text('Today')),
+                  DropdownMenuItem(value: 'week', child: Text('This Week')),
                 ],
               ),
             ],
@@ -57,7 +56,7 @@ class _NewsWidgetTrandingsState extends State<NewsWidgetTrandings> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: const Image(
-                              image: AssetImage(AppImages.movie_placholder),
+                              image: AssetImage(AppImages.moviePlacholder),
                             ),
                           ),
                         ),
@@ -72,7 +71,7 @@ class _NewsWidgetTrandingsState extends State<NewsWidgetTrandings> {
                             child: const Icon(Icons.more_horiz),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           left: 10,
                           bottom: 0,
                           child: SizedBox(
@@ -80,12 +79,11 @@ class _NewsWidgetTrandingsState extends State<NewsWidgetTrandings> {
                             height: 40,
                             child: RadialPercentWidget(
                               percent: 0.68,
-                              fillColor: const Color.fromARGB(255, 10, 23, 25),
-                              lineColor:
-                                  const Color.fromARGB(255, 37, 203, 103),
-                              freeColor: const Color.fromARGB(255, 25, 54, 31),
+                              fillColor: Color.fromARGB(255, 10, 23, 25),
+                              lineColor: Color.fromARGB(255, 37, 203, 103),
+                              freeColor: Color.fromARGB(255, 25, 54, 31),
                               lineWidth: 3,
-                              child: const Text(
+                              child: Text(
                                 '68%',
                                 style: TextStyle(
                                   color: Colors.white,

@@ -1,9 +1,17 @@
 import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
+
+enum ApiClientExceptionType { Network, Auth, Other }
+
+class ApiClientException implements Exception {
+  final ApiClientExceptionType type;
+
+  ApiClientException(this.type);
+}
 
 class AuthModel extends ChangeNotifier {
   final _apiCLient = ApiClient();
@@ -23,7 +31,7 @@ class AuthModel extends ChangeNotifier {
     final password = passTextController.text;
 
     if (username.isEmpty || password.isEmpty) {
-      _errorMessage = 'Заполните логин и пароль';
+      _errorMessage = 'Заполните логин и пароль.';
       notifyListeners();
       return;
     }
@@ -33,9 +41,24 @@ class AuthModel extends ChangeNotifier {
     String? sessionId;
     try {
       sessionId = await _apiCLient.auth(username: username, password: password);
-    } catch (e) {
-      _errorMessage = 'Неправильный логин или пароль';
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.Network:
+          _errorMessage =
+              'Сервер недоступен. Проверьте подключение к интернету.';
+          break;
+        case ApiClientExceptionType.Auth:
+          _errorMessage = 'Не правильный логин или пароль.';
+          break;
+        case ApiClientExceptionType.Other:
+          _errorMessage = 'Произошла ошибка. Попробуйте еще раз.';
+          break;
+      }
     }
+    //// убираем так как уверены что все ошибки обработали
+    // catch (e) {
+    //   _errorMessage = 'Произошла ошибка. Попробуйте еще раз.';
+    // }
 
     _isAuthProgress = false;
     if (_errorMessage != null) {
@@ -44,7 +67,7 @@ class AuthModel extends ChangeNotifier {
     }
 
     if (sessionId == null) {
-      _errorMessage = 'Неизвестная ошибка, повторите попытку';
+      _errorMessage = 'Неизвестная ошибка, повторите попытку.';
       return;
     }
     //если все ок сохраняем sessionId

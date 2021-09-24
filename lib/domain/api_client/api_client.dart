@@ -1,15 +1,18 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
+import 'package:moviedb/domain/entity/popular_movie_response.dart';
 import 'package:moviedb/ui/widgets/auth/auth_model.dart';
 
 class ApiClient {
   final _client = HttpClient();
 
   static const _host = 'https://api.themoviedb.org/3';
+  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = '038971d5d5edcdd1dd72e951b29c9614';
   // https://api.themoviedb.org/3/movie/76341?api_key=<<api_key>>
+
+  static String imageUrl(String path) => _imageUrl + path;
 
   Future<String> auth(
       {required String username, required String password}) async {
@@ -45,11 +48,11 @@ class ApiClient {
       final result = parser(json);
       return result;
     } on SocketException {
-      throw ApiClientException(ApiClientExceptionType.Network);
+      throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
     } catch (e) {
-      throw ApiClientException(ApiClientExceptionType.Other);
+      throw ApiClientException(ApiClientExceptionType.other);
     }
   }
 
@@ -73,11 +76,11 @@ class ApiClient {
       final result = parser(json);
       return result;
     } on SocketException {
-      throw ApiClientException(ApiClientExceptionType.Network);
+      throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
     } catch (e) {
-      throw ApiClientException(ApiClientExceptionType.Other);
+      throw ApiClientException(ApiClientExceptionType.other);
     }
   }
 
@@ -144,14 +147,34 @@ class ApiClient {
     return result;
   }
 
+// Запрос на получение списка популярных фильмов
+  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+    PopularMovieResponse parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final popularMovieResponse = PopularMovieResponse.fromJson(jsonMap);
+      return popularMovieResponse;
+    }
+
+    final result = await _get<PopularMovieResponse>(
+      '/movie/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'language': locale,
+        'page': page.toString(),
+      },
+    );
+    return result;
+  }
+
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
       final status = json['status_code'];
       final code = status is int ? status : 0;
       if (code == 30) {
-        throw ApiClientException(ApiClientExceptionType.Auth);
+        throw ApiClientException(ApiClientExceptionType.auth);
       } else {
-        throw ApiClientException(ApiClientExceptionType.Other);
+        throw ApiClientException(ApiClientExceptionType.other);
       }
     }
   }

@@ -18,7 +18,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
           fit: BoxFit.fitHeight,
           colorFilter:
               ColorFilter.mode(Colors.blueGrey.shade700, BlendMode.modulate),
-          image: const AssetImage(AppImages.trailer_background),
+          image: const AssetImage(AppImages.trailerBackground),
         ),
       ),
       child: Column(
@@ -43,10 +43,10 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                   style: const TextStyle(color: Colors.white),
                   iconEnabledColor: Colors.white,
                   onChanged: (catrgory) {},
-                  items: [
-                    const DropdownMenuItem(
+                  items: const [
+                    DropdownMenuItem(
                         value: 'streaming', child: Text('Streaming')),
-                    const DropdownMenuItem(value: 'tv', child: Text('On TV')),
+                    DropdownMenuItem(value: 'tv', child: Text('On TV')),
                   ],
                 ),
               ],
@@ -74,12 +74,12 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Stack(
                                     alignment: Alignment.center,
-                                    children: [
-                                      const Image(
+                                    children: const [
+                                      Image(
                                         image: AssetImage(
-                                            AppImages.trailer_preview),
+                                            AppImages.trailerPreview),
                                       ),
-                                      const DecoratedBox(
+                                      DecoratedBox(
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(

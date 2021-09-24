@@ -5,7 +5,7 @@ import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
-enum ApiClientExceptionType { Network, Auth, Other }
+enum ApiClientExceptionType { network, auth, other }
 
 class ApiClientException implements Exception {
   final ApiClientExceptionType type;
@@ -43,14 +43,14 @@ class AuthModel extends ChangeNotifier {
       sessionId = await _apiCLient.auth(username: username, password: password);
     } on ApiClientException catch (e) {
       switch (e.type) {
-        case ApiClientExceptionType.Network:
+        case ApiClientExceptionType.network:
           _errorMessage =
               'Сервер недоступен. Проверьте подключение к интернету.';
           break;
-        case ApiClientExceptionType.Auth:
+        case ApiClientExceptionType.auth:
           _errorMessage = 'Не правильный логин или пароль.';
           break;
-        case ApiClientExceptionType.Other:
+        case ApiClientExceptionType.other:
           _errorMessage = 'Произошла ошибка. Попробуйте еще раз.';
           break;
       }

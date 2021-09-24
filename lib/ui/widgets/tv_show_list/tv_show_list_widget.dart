@@ -19,7 +19,7 @@ class TVShow {
 }
 
 class TWShowListWidget extends StatefulWidget {
-  TWShowListWidget({Key? key}) : super(key: key);
+  const TWShowListWidget({Key? key}) : super(key: key);
 
   @override
   _TWShowListWidgetState createState() => _TWShowListWidgetState();
@@ -29,112 +29,112 @@ class _TWShowListWidgetState extends State<TWShowListWidget> {
   final _movies = [
     TVShow(
       id: 1,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Flash',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 2,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Чудеса науки',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 3,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Скользящие',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 4,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Академия амбрелла',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 5,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Ходячие мертвицы',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 6,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Пищеблок',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 7,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Вампиры средней полосы',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 8,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Теория большого взрыва',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 9,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Дество шелдона',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 10,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Как я встретил вашу маму',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 11,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Гравити фолз',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 12,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Утинные истории',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 13,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Джентельмены',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 14,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Наследие юпитера',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 15,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Друзья',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
     ),
     TVShow(
       id: 16,
-      imageName: AppImages.tvshow_placeholder,
+      imageName: AppImages.tvshowPlaceholder,
       title: 'Квантовый скачек',
       time: 'April  7, 2021',
       description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',

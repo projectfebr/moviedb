@@ -86,7 +86,7 @@ class _DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       'Description Description Description Description Description Description Description Description Description Description Description',
       style: TextStyle(
         fontWeight: FontWeight.w400,
@@ -104,7 +104,7 @@ class _OverwievWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       'Overwiev',
       style: TextStyle(
         fontWeight: FontWeight.w400,
@@ -122,12 +122,12 @@ class _TopPosterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: const [
-        Image(image: AssetImage(AppImages.top_header)),
+        Image(image: AssetImage(AppImages.topHeader)),
         Positioned(
             top: 20,
             left: 20,
             bottom: 20,
-            child: Image(image: AssetImage(AppImages.top_header_sub_image))),
+            child: Image(image: AssetImage(AppImages.topHeaderSubImage))),
       ],
     );
   }
@@ -141,7 +141,7 @@ class _MovieNameWidget extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       maxLines: 3,
-      text: TextSpan(children: const [
+      text: const TextSpan(children: [
         TextSpan(
           text: 'Tom Clancy without remote fgdfg dfgdgd dfgdg ',
           style: TextStyle(
@@ -165,10 +165,10 @@ class _SummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
+    return const ColoredBox(
       color: Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
         child: Text(
           'R 04/29/2021 (US) Action, Adventure, Thriller, War',
           textAlign: TextAlign.center,
@@ -188,12 +188,12 @@ class _PeopleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nameStyle = TextStyle(
+    const nameStyle = TextStyle(
       fontWeight: FontWeight.w400,
       color: Colors.white,
       fontSize: 16,
     );
-    final jobTitleStyle = TextStyle(
+    const jobTitleStyle = TextStyle(
       fontWeight: FontWeight.w400,
       color: Colors.white,
       fontSize: 16,
@@ -206,7 +206,7 @@ class _PeopleWidget extends StatelessWidget {
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'Crwedf SDsdfd',
                   style: nameStyle,
@@ -219,7 +219,7 @@ class _PeopleWidget extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text('Crwe SDsdsdfd', style: nameStyle),
                 Text(
                   'Producer',
@@ -229,14 +229,14 @@ class _PeopleWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'Crwedf SDsdfd',
                   style: nameStyle,
@@ -249,7 +249,7 @@ class _PeopleWidget extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text('Crwe SDsdsdfd', style: nameStyle),
                 Text(
                   'Producer',

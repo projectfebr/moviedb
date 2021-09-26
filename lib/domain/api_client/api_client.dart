@@ -167,6 +167,32 @@ class ApiClient {
     return result;
   }
 
+  // Запрос на получение списка популярных фильмов
+  Future<PopularMovieResponse> searchMovie(
+    int page,
+    String locale,
+    String query,
+  ) async {
+    PopularMovieResponse parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final popularMovieResponse = PopularMovieResponse.fromJson(jsonMap);
+      return popularMovieResponse;
+    }
+
+    final result = await _get<PopularMovieResponse>(
+      '/search/movie',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'language': locale,
+        'page': page.toString(),
+        'query': query,
+        'include_adult': true.toString(),
+      },
+    );
+    return result;
+  }
+
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
       final status = json['status_code'];

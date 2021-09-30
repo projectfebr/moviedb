@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:moviedb/domain/entity/popular_movie_response.dart';
+import 'package:moviedb/domain/entity/movie_details.dart';
 import 'package:moviedb/ui/widgets/auth/auth_model.dart';
 
 class ApiClient {
@@ -188,6 +189,28 @@ class ApiClient {
         'page': page.toString(),
         'query': query,
         'include_adult': true.toString(),
+      },
+    );
+    return result;
+  }
+
+  // Запрос на получение информации о фильме
+  Future<MovieDetails> movieDetails(
+    int movieId,
+    String locale,
+  ) async {
+    MovieDetails parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final movieDetails = MovieDetails.fromJson(jsonMap);
+      return movieDetails;
+    }
+
+    final result = await _get<MovieDetails>(
+      '/movie/$movieId',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'language': locale,
       },
     );
     return result;

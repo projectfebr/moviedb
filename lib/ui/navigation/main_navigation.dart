@@ -35,7 +35,7 @@ class MainNavigation {
       case MainNavigationRouteNames.movieDetails:
         final arguments = settings.arguments;
         final movieId = arguments is int ? arguments : 0;
-        return MaterialPageRoute(
+        return MaterialPageRoute<MoveDetailsWidget>(
           builder: (context) => NotifierProvider(
             create: () => MovieDetailsModel(movieId: movieId),
             child: const MoveDetailsWidget(),
@@ -43,7 +43,7 @@ class MainNavigation {
         );
       default:
         const widget = Text('Navigation error!');
-        return MaterialPageRoute(builder: (context) => widget);
+        return MaterialPageRoute<Widget>(builder: (context) => widget);
     }
   }
 }

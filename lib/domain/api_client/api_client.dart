@@ -121,7 +121,7 @@ class ApiClient {
       '/authentication/token/validate_with_login',
       parameters,
       parser,
-      {'api_key': _apiKey},
+      <String, String>{'api_key': _apiKey},
     );
     return result;
   }
@@ -143,7 +143,7 @@ class ApiClient {
       '/authentication/session/new',
       parameters,
       parser,
-      {'api_key': _apiKey},
+      <String, String>{'api_key': _apiKey},
     );
     return result;
   }
@@ -218,7 +218,7 @@ class ApiClient {
 
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
-      final status = json['status_code'];
+      final int status = json['status_code'] as int;
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.auth);

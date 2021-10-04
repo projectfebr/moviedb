@@ -24,13 +24,9 @@ class _MoveDetailsWidgetState extends State<MoveDetailsWidget> {
       appBar: AppBar(
         title: const _TitleWidget(),
       ),
-      body: ColoredBox(
-        color: const Color.fromRGBO(24, 23, 27, 1.0),
-        child: ListView(
-          children: const [
-            MovieDetailsMainInfoWidget(),
-          ],
-        ),
+      body: const ColoredBox(
+        color: Color.fromRGBO(24, 23, 27, 1.0),
+        child: _BodyWidget(),
       ),
     );
   }
@@ -43,5 +39,19 @@ class _TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieDetailsModel>(context);
     return Text(model?.movieDetails?.title ?? 'Загрузка');
+  }
+}
+
+class _BodyWidget extends StatelessWidget {
+  const _BodyWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: const [
+        MovieDetailsMainInfoWidget(),
+        SizedBox(height: 30),
+      ],
+    );
   }
 }

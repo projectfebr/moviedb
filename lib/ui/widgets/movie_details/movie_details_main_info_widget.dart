@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/resources/resources.dart';
+import 'package:moviedb/domain/api_client/api_client.dart';
+import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/widgets/elements/radial_percent_widget.dart';
+import 'package:moviedb/ui/widgets/movie_details/movie_details_model.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({Key? key}) : super(key: key);
@@ -37,6 +39,11 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final movieDetails =
+        NotifierProvider.watch<MovieDetailsModel>((context))?.movieDetails;
+    var voteAverage = movieDetails?.voteAverage ?? 0;
+    voteAverage *= 10;
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,21 +51,21 @@ class _ScoreWidget extends StatelessWidget {
         TextButton(
             onPressed: () {},
             child: Row(
-              children: const [
+              children: [
                 SizedBox(
                   width: 40,
                   height: 40,
                   child: RadialPercentWidget(
-                    child: Text('72'),
-                    percent: 0.72,
-                    fillColor: Color.fromARGB(255, 10, 23, 45),
-                    lineColor: Color.fromARGB(255, 37, 203, 103),
-                    freeColor: Color.fromARGB(255, 25, 54, 31),
+                    child: Text(voteAverage.toStringAsFixed(0)),
+                    percent: voteAverage / 100,
+                    fillColor: const Color.fromARGB(255, 10, 23, 45),
+                    lineColor: const Color.fromARGB(255, 37, 203, 103),
+                    freeColor: const Color.fromARGB(255, 25, 54, 31),
                     lineWidth: 3,
                   ),
                 ),
-                SizedBox(width: 10),
-                Text('User Score'),
+                const SizedBox(width: 10),
+                const Text('User Score'),
               ],
             )),
         Container(
@@ -86,9 +93,11 @@ class _DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Description Description Description Description Description Description Description Description Description Description Description',
-      style: TextStyle(
+    final movieDetails =
+        NotifierProvider.watch<MovieDetailsModel>((context))?.movieDetails;
+    return Text(
+      movieDetails?.overview ?? '',
+      style: const TextStyle(
         fontWeight: FontWeight.w400,
         color: Colors.white,
         fontSize: 16,
@@ -120,15 +129,27 @@ class _TopPosterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: const [
-        Image(image: AssetImage(AppImages.topHeader)),
-        Positioned(
+    final model = NotifierProvider.watch<MovieDetailsModel>((context));
+    final backdropPath = model?.movieDetails?.backdropPath;
+    final posterPath = model?.movieDetails?.posterPath;
+
+    return AspectRatio(
+      aspectRatio: 390 / 219,
+      child: Stack(
+        children: [
+          backdropPath != null
+              ? Image.network(ApiClient.imageUrl(backdropPath))
+              : const SizedBox.shrink(),
+          Positioned(
             top: 20,
             left: 20,
             bottom: 20,
-            child: Image(image: AssetImage(AppImages.topHeaderSubImage))),
-      ],
+            child: posterPath != null
+                ? Image.network(ApiClient.imageUrl(posterPath))
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -138,24 +159,30 @@ class _MovieNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      textAlign: TextAlign.center,
-      maxLines: 3,
-      text: const TextSpan(children: [
-        TextSpan(
-          text: 'Tom Clancy without remote fgdfg dfgdgd dfgdg ',
-          style: TextStyle(
-              fontWeight: FontWeight.w600, color: Colors.white, fontSize: 18),
-        ),
-        TextSpan(
-          text: ' (2021)',
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-            fontSize: 16,
+    final model = NotifierProvider.watch<MovieDetailsModel>((context));
+    var year = model?.movieDetails?.releaseDate?.year.toString();
+    year = year != null ? ' ($year)' : '';
+
+    return Center(
+      child: RichText(
+        textAlign: TextAlign.center,
+        maxLines: 3,
+        text: TextSpan(children: [
+          TextSpan(
+            text: model?.movieDetails?.title ?? '',
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, color: Colors.white, fontSize: 18),
           ),
-        ),
-      ]),
+          TextSpan(
+            text: year,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }
@@ -165,14 +192,45 @@ class _SummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: Color.fromRGBO(22, 21, 25, 1.0),
+    final model = NotifierProvider.watch<MovieDetailsModel>((context));
+    if (model == null) return const SizedBox.shrink();
+    var texts = <String>[];
+
+    final releaseDate = model.movieDetails?.releaseDate;
+    if (releaseDate != null) {
+      texts.add(model.stringFromDate(releaseDate));
+    }
+
+    final productionCountries = model.movieDetails?.productionCountries;
+    if (productionCountries != null && productionCountries.isNotEmpty) {
+      final name = productionCountries.first.iso;
+      texts.add(name);
+    }
+
+    final runtime = model.movieDetails?.runtime ?? 0;
+    final duration = Duration(minutes: runtime);
+    final hours = duration.inHours;
+    final minuts = duration.inMinutes.remainder(60);
+    texts.add('${hours}h ${minuts}m');
+
+    final genres = model.movieDetails?.genres;
+    if (genres != null && genres.isNotEmpty) {
+      var genresNames = <String>[];
+
+      for (var genre in genres) {
+        genresNames.add(genre.name);
+      }
+      texts.add(genresNames.join(', '));
+    }
+
+    return ColoredBox(
+      color: const Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Text(
-          'R 04/29/2021 (US) Action, Adventure, Thriller, War',
+          texts.join(' '),
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             color: Colors.white,
             fontSize: 16,

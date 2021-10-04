@@ -4,6 +4,7 @@ import 'package:moviedb/ui/widgets/auth/auth_model.dart';
 import 'package:moviedb/ui/widgets/auth/auth_widget.dart';
 import 'package:moviedb/ui/widgets/main_screen/main_screen_model.dart';
 import 'package:moviedb/ui/widgets/main_screen/main_screen_widget.dart';
+import 'package:moviedb/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_widget.dart';
 
 class MainNavigationRouteNames {
@@ -19,11 +20,11 @@ class MainNavigation {
 
   final routes = <String, Widget Function(BuildContext)>{
     MainNavigationRouteNames.auth: (context) => NotifierProvider<AuthModel>(
-          model: AuthModel(),
+          create: () => AuthModel(),
           child: const AuthWidget(),
         ),
     MainNavigationRouteNames.mainScreen: (context) => NotifierProvider(
-          model: MainScreenModel(),
+          create: () => MainScreenModel(),
           child: const MainScreenWidget(),
         ),
   };
@@ -34,11 +35,15 @@ class MainNavigation {
       case MainNavigationRouteNames.movieDetails:
         final arguments = settings.arguments;
         final movieId = arguments is int ? arguments : 0;
-        return MaterialPageRoute(
-            builder: (context) => MoveDetailsWidget(movieId: movieId));
+        return MaterialPageRoute<MoveDetailsWidget>(
+          builder: (context) => NotifierProvider(
+            create: () => MovieDetailsModel(movieId: movieId),
+            child: const MoveDetailsWidget(),
+          ),
+        );
       default:
         const widget = Text('Navigation error!');
-        return MaterialPageRoute(builder: (context) => widget);
+        return MaterialPageRoute<Widget>(builder: (context) => widget);
     }
   }
 }

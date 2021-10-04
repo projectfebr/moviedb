@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:moviedb/domain/entity/popular_movie_response.dart';
+import 'package:moviedb/domain/entity/movie_details.dart';
 import 'package:moviedb/ui/widgets/auth/auth_model.dart';
 
 class ApiClient {
@@ -120,7 +121,7 @@ class ApiClient {
       '/authentication/token/validate_with_login',
       parameters,
       parser,
-      {'api_key': _apiKey},
+      <String, String>{'api_key': _apiKey},
     );
     return result;
   }
@@ -142,7 +143,7 @@ class ApiClient {
       '/authentication/session/new',
       parameters,
       parser,
-      {'api_key': _apiKey},
+      <String, String>{'api_key': _apiKey},
     );
     return result;
   }
@@ -193,9 +194,31 @@ class ApiClient {
     return result;
   }
 
+  // Запрос на получение информации о фильме
+  Future<MovieDetails> movieDetails(
+    int movieId,
+    String locale,
+  ) async {
+    MovieDetails parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final movieDetails = MovieDetails.fromJson(jsonMap);
+      return movieDetails;
+    }
+
+    final result = await _get<MovieDetails>(
+      '/movie/$movieId',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'language': locale,
+      },
+    );
+    return result;
+  }
+
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
-      final status = json['status_code'];
+      final int status = json['status_code'] as int;
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.auth);

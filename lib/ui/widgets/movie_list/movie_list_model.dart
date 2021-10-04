@@ -29,9 +29,6 @@ class MovieListModel extends ChangeNotifier {
     if (_locale == locale.toLanguageTag()) return;
     _locale = locale.toLanguageTag();
     _dateFormat = DateFormat.yMMMMd(_locale);
-    _currentPage = 0;
-    _totalPage = 1;
-    _movies.clear();
     await _resetList();
   }
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
+import 'package:moviedb/ui/widgets/movie_details/movie_details_model.dart';
 
 class MoveDetailsWidget extends StatefulWidget {
-  final int movieId;
-  const MoveDetailsWidget({Key? key, required this.movieId}) : super(key: key);
+  const MoveDetailsWidget({Key? key}) : super(key: key);
 
   @override
   _MoveDetailsWidgetState createState() => _MoveDetailsWidgetState();
@@ -11,19 +12,46 @@ class MoveDetailsWidget extends StatefulWidget {
 
 class _MoveDetailsWidgetState extends State<MoveDetailsWidget> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    NotifierProvider.read<MovieDetailsModel>(context)
+        ?.setupLocale(context: context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lucifer'),
+        title: const _TitleWidget(),
       ),
-      body: ColoredBox(
-        color: const Color.fromRGBO(24, 23, 27, 1.0),
-        child: ListView(
-          children: const [
-            MovieDetailsMainInfoWidget(),
-          ],
-        ),
+      body: const ColoredBox(
+        color: Color.fromRGBO(24, 23, 27, 1.0),
+        child: _BodyWidget(),
       ),
+    );
+  }
+}
+
+class _TitleWidget extends StatelessWidget {
+  const _TitleWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    return Text(model?.movieDetails?.title ?? 'Загрузка');
+  }
+}
+
+class _BodyWidget extends StatelessWidget {
+  const _BodyWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: const [
+        MovieDetailsMainInfoWidget(),
+        SizedBox(height: 30),
+      ],
     );
   }
 }

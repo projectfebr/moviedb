@@ -47,6 +47,11 @@ class _BodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>((context));
+    final movieDetails = model?.movieDetails;
+    if (movieDetails == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return ListView(
       children: const [
         MovieDetailsMainInfoWidget(),

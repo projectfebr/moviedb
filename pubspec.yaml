@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter     
   intl: ^0.17.0 # для дейт форматтера, парсинг даты
   http: ^0.13.3
+  youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4

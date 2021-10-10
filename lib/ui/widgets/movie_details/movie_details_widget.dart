@@ -3,6 +3,7 @@ import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_main_screen_cast_widget.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_model.dart';
+import 'package:moviedb/ui/widgets/my_app.dart/my_app_model.dart';
 
 class MoveDetailsWidget extends StatefulWidget {
   const MoveDetailsWidget({Key? key}) : super(key: key);
@@ -12,6 +13,14 @@ class MoveDetailsWidget extends StatefulWidget {
 }
 
 class _MoveDetailsWidgetState extends State<MoveDetailsWidget> {
+  @override
+  void initState() {
+    super.initState();
+    final model = NotifierProvider.read<MovieDetailsModel>(context);
+    final appModel = Provider.read<MyAppModel>(context);
+    model?.sessionExpired = () => appModel?.resetSession(context);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

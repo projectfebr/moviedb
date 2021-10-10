@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moviedb/Theme/app_colors.dart';
+import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 import 'package:moviedb/ui/widgets/my_app.dart/my_app_model.dart';
 
 class MyApp extends StatelessWidget {
   //static чтобы не пересзодавался, он все равно всегда будет без изменений
   static final mainNavigation = MainNavigation();
-  final MyAppModel model;
+  // final MyAppModel model;
 
-  const MyApp({Key? key, required this.model}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final model = Provider.read<MyAppModel>(context);
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.grey,
         ),
       ),
-      initialRoute: mainNavigation.initialRoute(model.isAuth),
+      initialRoute: mainNavigation.initialRoute(model?.isAuth == true),
       routes: mainNavigation.routes,
       // в onGenerateRoute можно проверять авторизован ли юзер. canPop() будет всегда true
       onGenerateRoute: mainNavigation.onGenerateRoute,

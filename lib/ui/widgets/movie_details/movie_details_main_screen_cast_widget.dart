@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
-import 'package:moviedb/resources/resources.dart';
 import 'package:moviedb/ui/widgets/movie_details/movie_details_model.dart';
 
 class MovieDetailsMainScreenCastWidget extends StatelessWidget {

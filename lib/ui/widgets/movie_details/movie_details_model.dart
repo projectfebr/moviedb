@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
+import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/domain/entity/movie_details.dart';
 
 class MovieDetailsModel extends ChangeNotifier {
+  final _sessionDataProvider = SessionDataProvider();
   final _apiClient = ApiClient();
 
   final int movieId;
@@ -12,6 +14,9 @@ class MovieDetailsModel extends ChangeNotifier {
 
   MovieDetails? _movieDetails;
   MovieDetails? get movieDetails => _movieDetails;
+
+  bool _isFavorite = false;
+  bool get isFavorite => _isFavorite;
 
   MovieDetailsModel({required this.movieId});
 
@@ -28,6 +33,27 @@ class MovieDetailsModel extends ChangeNotifier {
 
   Future<void> _loadDetails() async {
     _movieDetails = await _apiClient.movieDetails(movieId, _locale);
+    final sessionId = await _sessionDataProvider.getSessionId();
+    if (sessionId != null) {
+      _isFavorite = await _apiClient.isFavorite(movieId, sessionId);
+    }
     notifyListeners();
+  }
+
+  Future<void> toggleFavorite() async {
+    final sessionId = await _sessionDataProvider.getSessionId();
+    final accountId = await _sessionDataProvider.getAccountId();
+
+    if (accountId == null || sessionId == null) return;
+
+    _isFavorite = !_isFavorite;
+    notifyListeners();
+    await _apiClient.markAsFavorite(
+      accountId: accountId,
+      sessionId: sessionId,
+      mediaType: ApiClientMediaType.movie,
+      mediaId: movieId,
+      favorite: _isFavorite,
+    );
   }
 }

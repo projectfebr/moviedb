@@ -5,14 +5,6 @@ import 'package:moviedb/domain/api_client/api_client.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
-enum ApiClientExceptionType { network, auth, other }
-
-class ApiClientException implements Exception {
-  final ApiClientExceptionType type;
-
-  ApiClientException(this.type);
-}
-
 class AuthModel extends ChangeNotifier {
   final _apiCLient = ApiClient();
   final _sessionDataProvider = SessionDataProvider();
@@ -39,8 +31,10 @@ class AuthModel extends ChangeNotifier {
     _isAuthProgress = true;
     notifyListeners();
     String? sessionId;
+    int? accountId;
     try {
       sessionId = await _apiCLient.auth(username: username, password: password);
+      accountId = await _apiCLient.getAccountInfo(sessionId);
     } on ApiClientException catch (e) {
       switch (e.type) {
         case ApiClientExceptionType.network:
@@ -66,12 +60,13 @@ class AuthModel extends ChangeNotifier {
       return;
     }
 
-    if (sessionId == null) {
+    if (!(sessionId != null && accountId != null)) {
       _errorMessage = 'Неизвестная ошибка, повторите попытку.';
       return;
     }
     //если все ок сохраняем sessionId
     await _sessionDataProvider.setSessionId(sessionId);
+    await _sessionDataProvider.setAccountId(accountId);
     //совершить переход после успещной авторизации
     unawaited(Navigator.of(context)
         .pushReplacementNamed(MainNavigationRouteNames.mainScreen));

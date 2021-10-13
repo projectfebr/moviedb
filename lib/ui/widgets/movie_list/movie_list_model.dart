@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:moviedb/domain/api_client/api_client.dart';
+import 'package:moviedb/domain/api_client/movie_api_client.dart';
 import 'package:moviedb/domain/entity/movie.dart';
 import 'package:moviedb/domain/entity/popular_movie_response.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class MovieListModel extends ChangeNotifier {
-  final _apiClient = ApiClient();
+  final _apiClient = MovieApiClient();
   final _movies = <Movie>[];
 
   String _locale = '';

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moviedb/domain/api_client/api_client.dart';
+import 'package:moviedb/domain/api_client/image_downloader.dart';
 import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
 import 'package:moviedb/ui/widgets/movie_list/movie_list_model.dart';
 
@@ -44,7 +44,7 @@ class MovieListWidget extends StatelessWidget {
                       children: [
                         if (posterPath != null)
                           Image.network(
-                            ApiClient.imageUrl(posterPath),
+                            ImageDownloader.imageUrl(posterPath),
                             width: 95,
                           ),
                         const SizedBox(width: 15),

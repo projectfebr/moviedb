@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:moviedb/domain/api_client/api_client.dart';
+import 'package:moviedb/domain/api_client/api_client_exception.dart';
 import 'package:moviedb/domain/services/auth_service.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 

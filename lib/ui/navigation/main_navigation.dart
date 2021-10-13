@@ -11,7 +11,7 @@ class MainNavigationRouteNames {
   static const movieTrailer = '/main_screen/movie_details/trailer';
 }
 
-class MainNavigation {
+class MainNavigator {
   static final _screenFactory = ScreenFactory();
   final routes = <String, Widget Function(BuildContext)>{
     MainNavigationRouteNames.loader: (_) => _screenFactory.makeLoaderWidget(),
@@ -39,5 +39,10 @@ class MainNavigation {
         const widget = Text('Navigation error!');
         return MaterialPageRoute<Widget>(builder: (_) => widget);
     }
+  }
+
+  static void resetNavigation(BuildContext context) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        MainNavigationRouteNames.loader, (route) => false);
   }
 }

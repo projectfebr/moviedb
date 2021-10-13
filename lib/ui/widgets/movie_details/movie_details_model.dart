@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:moviedb/domain/api_client/accaunt_api_client.dart';
+import 'package:moviedb/domain/api_client/account_api_client.dart';
 import 'package:moviedb/domain/api_client/movie_api_client.dart';
 import 'package:moviedb/domain/api_client/api_client_exception.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';

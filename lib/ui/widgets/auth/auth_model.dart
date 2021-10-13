@@ -1,13 +1,13 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/api_client/api_client.dart';
-import 'package:moviedb/domain/data_providers/session_data_provider.dart';
+import 'package:moviedb/domain/services/auth_service.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
-class AuthModel extends ChangeNotifier {
-  final _apiCLient = ApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+class AuthViewModel extends ChangeNotifier {
+  final _authService = AuthService();
   final loginTextController = TextEditingController();
   final passTextController = TextEditingController();
   String? _errorMessage;
@@ -18,83 +18,60 @@ class AuthModel extends ChangeNotifier {
   bool get canStartAuth => !_isAuthProgress;
   bool get isAuthProgress => _isAuthProgress;
 
+  bool _isValid(String username, String password) =>
+      username.isNotEmpty && password.isNotEmpty;
+
+  Future<String?> _login(String username, String password) async {
+    try {
+      await _authService.login(username, password);
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.network:
+          return 'Сервер недоступен. Проверьте подключение к интернету.';
+
+        case ApiClientExceptionType.auth:
+          return 'Не правильный логин или пароль.';
+
+        case ApiClientExceptionType.sessionExpired:
+        case ApiClientExceptionType.other:
+          return 'Произошла ошибка. Попробуйте еще раз.';
+      }
+    } catch (e) {
+      return 'Неизвестная ошибка, повторите попытку.';
+    }
+    return null;
+  }
+
+  void _updateState(String? errorMessage, bool isAuthProgress) {
+    if (_errorMessage == errorMessage && _isAuthProgress == isAuthProgress) {
+      return;
+    } else {
+      _errorMessage = errorMessage;
+      _isAuthProgress = isAuthProgress;
+      notifyListeners();
+    }
+  }
+
   Future<void> auth(BuildContext context) async {
     final username = loginTextController.text;
     final password = passTextController.text;
 
-    if (username.isEmpty || password.isEmpty) {
-      _errorMessage = 'Заполните логин и пароль.';
-      notifyListeners();
-      return;
-    }
-    _errorMessage = null;
-    _isAuthProgress = true;
-    notifyListeners();
-    String? sessionId;
-    int? accountId;
-    try {
-      sessionId = await _apiCLient.auth(username: username, password: password);
-      accountId = await _apiCLient.getAccountInfo(sessionId);
-    } on ApiClientException catch (e) {
-      switch (e.type) {
-        case ApiClientExceptionType.network:
-          _errorMessage =
-              'Сервер недоступен. Проверьте подключение к интернету.';
-          break;
-        case ApiClientExceptionType.auth:
-          _errorMessage = 'Не правильный логин или пароль.';
-          break;
-        case ApiClientExceptionType.other:
-          _errorMessage = 'Произошла ошибка. Попробуйте еще раз.';
-          break;
-      }
-    }
-    //// убираем так как уверены что все ошибки обработали
-    // catch (e) {
-    //   _errorMessage = 'Произошла ошибка. Попробуйте еще раз.';
-    // }
-
-    _isAuthProgress = false;
-    if (_errorMessage != null) {
-      notifyListeners();
+    if (!_isValid(username, password)) {
+      _updateState('Заполните логин и пароль.', false);
       return;
     }
 
-    if (!(sessionId != null && accountId != null)) {
-      _errorMessage = 'Неизвестная ошибка, повторите попытку.';
-      return;
+    _updateState(null, true);
+
+    _errorMessage = await _login(username, password);
+
+    if (_errorMessage == null) {
+      MainNavigator.resetNavigation(context);
+    } else {
+      _updateState(_errorMessage, false);
     }
-    //если все ок сохраняем sessionId
-    await _sessionDataProvider.setSessionId(sessionId);
-    await _sessionDataProvider.setAccountId(accountId);
+
     //совершить переход после успещной авторизации
-    unawaited(Navigator.of(context)
-        .pushReplacementNamed(MainNavigationRouteNames.mainScreen));
+    MainNavigator.resetNavigation(context);
   }
 }
-
-// class AuthProvider extends InheritedNotifier {
-//   final AuthModel model;
-
-//   const AuthProvider({
-//     Key? key,
-//     required this.model,
-//     required Widget child,
-//   }) : super(
-//           key: key,
-//           notifier: model,
-//           child: child,
-//         );
-
-//   static AuthProvider? watch(BuildContext context) {
-//     return context.dependOnInheritedWidgetOfExactType<AuthProvider>();
-//   }
-
-//   static AuthProvider? read(BuildContext context) {
-//     final widget =
-//         context.getElementForInheritedWidgetOfExactType<AuthProvider>()?.widget;
-//     return widget is AuthProvider ? widget : null;
-//   }
-// }
-
-

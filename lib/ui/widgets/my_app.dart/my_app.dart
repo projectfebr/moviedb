@@ -5,7 +5,7 @@ import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class MyApp extends StatelessWidget {
   //static чтобы не пересзодавался, он все равно всегда будет без изменений
-  static final mainNavigation = MainNavigation();
+  static final mainNavigation = MainNavigator();
   // final MyAppModel model;
 
   const MyApp({Key? key}) : super(key: key);

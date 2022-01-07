@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/data_providers/session_data_provider.dart';
-import 'package:moviedb/library/widgets/inherited/notifier_provider.dart';
-import 'package:moviedb/ui/widgets/movie_list/movie_list_model.dart';
-import 'package:moviedb/ui/widgets/movie_list/movie_list_widget.dart';
-import 'package:moviedb/ui/widgets/news/news_widget.dart';
-import 'package:moviedb/ui/widgets/tv_show_list/tv_show_list_widget.dart';
+import 'package:moviedb/domain/factories/screen_factory.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -15,8 +11,7 @@ class MainScreenWidget extends StatefulWidget {
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedTab = 0;
-
-  final movieListModel = MovieListModel();
+  final _screenFactory = ScreenFactory();
 
   void onSelectTab(int index) {
     if (_selectedTab == index) return;
@@ -26,14 +21,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    movieListModel.setupLocale(context: context);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // final model = NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('TMDB'),
@@ -47,12 +35,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          const NewsWidget(),
-          NotifierProvider(
-              create: () => movieListModel,
-              isManagingModel: false,
-              child: const MovieListWidget()),
-          const TWShowListWidget(),
+          _screenFactory.makeNewsList(),
+          _screenFactory.makeMovieList(),
+          _screenFactory.makeTVShowList(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

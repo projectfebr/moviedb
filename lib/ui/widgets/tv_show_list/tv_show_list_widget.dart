@@ -18,14 +18,14 @@ class TVShow {
   });
 }
 
-class TWShowListWidget extends StatefulWidget {
-  const TWShowListWidget({Key? key}) : super(key: key);
+class TVShowListWidget extends StatefulWidget {
+  const TVShowListWidget({Key? key}) : super(key: key);
 
   @override
-  _TWShowListWidgetState createState() => _TWShowListWidgetState();
+  _TVShowListWidgetState createState() => _TVShowListWidgetState();
 }
 
-class _TWShowListWidgetState extends State<TWShowListWidget> {
+class _TVShowListWidgetState extends State<TVShowListWidget> {
   final _movies = [
     TVShow(
       id: 1,
@@ -213,8 +213,7 @@ class _TWShowListWidgetState extends State<TWShowListWidget> {
                               const SizedBox(height: 20),
                               Text(
                                 movie.title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),

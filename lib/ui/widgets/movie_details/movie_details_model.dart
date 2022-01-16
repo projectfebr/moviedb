@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:moviedb/domain/api_client/account_api_client.dart';
 import 'package:moviedb/domain/api_client/api_client_exception.dart';
-import 'package:moviedb/domain/api_client/movie_api_client.dart';
-import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/domain/entity/movie_details.dart';
 import 'package:moviedb/domain/services/auth_service.dart';
+import 'package:moviedb/domain/services/movie_service.dart';
+import 'package:moviedb/library/localized_model.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class MovieDetailsMoviePosterData {
@@ -77,38 +76,21 @@ class MovieDetailsData {
 
 class MovieDetailsModel extends ChangeNotifier {
   final _authService = AuthService();
-  final _sessionDataProvider = SessionDataProvider();
-  final _movieApiClient = MovieApiClient();
-  final _accountApiClient = AccountApiClient();
+  final _movieService = MovieService();
 
   final int movieId;
   final data = MovieDetailsData();
-  String _locale = '';
+  final _localeStorage = LocalizedModelStorage();
   late DateFormat _dateFormat;
 
   MovieDetailsModel({required this.movieId});
 
-  Future<void> setupLocale({required BuildContext context}) async {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    if (_locale == locale) return;
-    _locale = locale;
-    _dateFormat = DateFormat.yMMMMd(_locale);
+  Future<void> setupLocale({required BuildContext context, required Locale locale}) async {
+    if (!_localeStorage.updateLocale(locale)) return;
+
+    _dateFormat = DateFormat.yMMMMd(_localeStorage.localeTag);
     updateData(null, false);
     await _loadDetails(context);
-  }
-
-  Future<void> _loadDetails(BuildContext context) async {
-    try {
-      final movieDetails = await _movieApiClient.movieDetails(movieId, _locale);
-      final sessionId = await _sessionDataProvider.getSessionId();
-      bool isFavorite = false;
-      if (sessionId != null) {
-        isFavorite = await _movieApiClient.isFavorite(movieId, sessionId);
-      }
-      updateData(movieDetails, isFavorite);
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e, context);
-    }
   }
 
   void updateData(MovieDetails? details, bool isFavorite) {
@@ -189,23 +171,22 @@ class MovieDetailsModel extends ChangeNotifier {
     return crewChunks;
   }
 
+  Future<void> _loadDetails(BuildContext context) async {
+    try {
+      final details =
+          await _movieService.loadDetails(movieId: movieId, locale: _localeStorage.localeTag);
+      updateData(details.movieDetails, details.isFavorite);
+    } on ApiClientException catch (e) {
+      _handleApiClientException(e, context);
+    }
+  }
+
   Future<void> toggleFavorite(BuildContext context) async {
-    final sessionId = await _sessionDataProvider.getSessionId();
-    final accountId = await _sessionDataProvider.getAccountId();
-
-    if (accountId == null || sessionId == null) return;
-
     final isFavorite = !data.posterData.isFavorite;
     data.posterData = data.posterData.copyWith(isFavorite: isFavorite);
     notifyListeners();
     try {
-      await _accountApiClient.markAsFavorite(
-        accountId: accountId,
-        sessionId: sessionId,
-        mediaType: ApiClientMediaType.movie,
-        mediaId: movieId,
-        favorite: isFavorite,
-      );
+      await _movieService.updateFavorite(movieId: movieId, isFavorite: isFavorite);
     } on ApiClientException catch (e) {
       _handleApiClientException(e, context);
     }

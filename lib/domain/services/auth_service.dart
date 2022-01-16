@@ -13,10 +13,14 @@ class AuthService {
   }
 
   Future<void> login(String login, String password) async {
-    final sessionId =
-        await _authApiCLient.auth(username: login, password: password);
+    final sessionId = await _authApiCLient.auth(username: login, password: password);
     final accountId = await _accountApiCLient.getAccountInfo(sessionId);
     await _sessionDataProvider.setSessionId(sessionId);
     await _sessionDataProvider.setAccountId(accountId);
+  }
+
+  Future<void> logout() async {
+    await _sessionDataProvider.deleteSessionId();
+    await _sessionDataProvider.deleteAccountId();
   }
 }

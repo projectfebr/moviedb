@@ -14,7 +14,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<MovieListViewModel>().setupLocale(context: context);
+    Future.microtask(() => context.read<MovieListViewModel>().setupLocale(context: context));
   }
 
   @override

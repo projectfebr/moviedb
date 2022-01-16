@@ -15,7 +15,9 @@ class _MoveDetailsWidgetState extends State<MoveDetailsWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.microtask(() => context.read<MovieDetailsModel>().setupLocale(context: context));
+    final locale = Localizations.localeOf(context);
+    Future.microtask(
+        () => context.read<MovieDetailsModel>().setupLocale(context: context, locale: locale));
   }
 
   @override

@@ -9,12 +9,13 @@ class SessionDataProvider {
   static const _storage = FlutterSecureStorage();
 
   Future<String?> getSessionId() => _storage.read(key: _Keys.sessionId);
-  Future<void> setSessionId(String? value) async {
-    if (value != null) {
-      _storage.write(key: _Keys.sessionId, value: value);
-    } else {
-      _storage.delete(key: _Keys.sessionId);
-    }
+
+  Future<void> setSessionId(String value) async {
+    _storage.write(key: _Keys.sessionId, value: value);
+  }
+
+  Future<void> deleteSessionId() async {
+    _storage.delete(key: _Keys.sessionId);
   }
 
   Future<int?> getAccountId() async {
@@ -22,11 +23,11 @@ class SessionDataProvider {
     return id != null ? int.tryParse(id) : null;
   }
 
-  Future<void> setAccountId(int? value) async {
-    if (value != null) {
-      _storage.write(key: _Keys.accountId, value: value.toString());
-    } else {
-      _storage.delete(key: _Keys.accountId);
-    }
+  Future<void> setAccountId(int value) async {
+    _storage.write(key: _Keys.accountId, value: value.toString());
+  }
+
+  Future<void> deleteAccountId() async {
+    _storage.delete(key: _Keys.accountId);
   }
 }

@@ -27,7 +27,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         title: const Text('TMDB'),
         actions: [
           IconButton(
-            onPressed: () => SessionDataProvider().setSessionId(null),
+            onPressed: () => SessionDataProvider().deleteSessionId(),
             icon: const Icon(Icons.logout),
           )
         ],

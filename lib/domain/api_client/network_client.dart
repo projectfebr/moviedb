@@ -72,7 +72,7 @@ class NetworkClient {
 
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
-      final int status = json['status_code'] as int;
+      final Object? status = json['status_code'];
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.auth);

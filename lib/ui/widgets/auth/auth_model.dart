@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/api_client/api_client_exception.dart';
 import 'package:moviedb/domain/services/auth_service.dart';
@@ -17,8 +17,7 @@ class AuthViewModel extends ChangeNotifier {
   bool get canStartAuth => !_isAuthProgress;
   bool get isAuthProgress => _isAuthProgress;
 
-  bool _isValid(String username, String password) =>
-      username.isNotEmpty && password.isNotEmpty;
+  bool _isValid(String username, String password) => username.isNotEmpty && password.isNotEmpty;
 
   Future<String?> _login(String username, String password) async {
     try {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/ui/widgets/my_app.dart/my_app.dart';
+import 'package:moviedb/ui/widgets/my_app.dart';
 
 void main() {
   const myApp = MyApp();

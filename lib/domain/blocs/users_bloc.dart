@@ -48,7 +48,7 @@ class UsersBloc {
     _initialize();
   }
 
-  void updateState(UsersState state) {
+  void _updateState(UsersState state) {
     if (_state == state) return;
     _state = state;
     _stateController.add(state);
@@ -56,20 +56,20 @@ class UsersBloc {
 
   Future<void> _initialize() async {
     final user = await _userDataProvider.loadValue();
-    updateState(_state.copyWith(currentUser: user));
+    _updateState(_state.copyWith(currentUser: user));
   }
 
   void incrementAge() {
     var user = _state.currentUser;
     user = user.copyWith(age: user.age + 1);
-    updateState(_state.copyWith(currentUser: user));
+    _updateState(_state.copyWith(currentUser: user));
     _userDataProvider.saveValue(user);
   }
 
   void decrementAge() {
     var user = _state.currentUser;
     user = user.copyWith(age: user.age - 1);
-    updateState(_state.copyWith(currentUser: user));
+    _updateState(_state.copyWith(currentUser: user));
     _userDataProvider.saveValue(user);
   }
 }

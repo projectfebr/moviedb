@@ -1,19 +1,19 @@
-import 'dart:async';
-
+import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:moviedb/domain/data_providers/user_data_provider.dart';
 import 'package:moviedb/domain/entity/user.dart';
 
-class UsersState {
+class UserState {
   final User currentUser;
 
-  const UsersState({
+  const UserState({
     required this.currentUser,
   });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UsersState && runtimeType == other.runtimeType && currentUser == other.currentUser);
+      (other is UserState && runtimeType == other.runtimeType && currentUser == other.currentUser);
 
   @override
   int get hashCode => currentUser.hashCode;
@@ -23,69 +23,64 @@ class UsersState {
     return 'UsersState{ currentUser: $currentUser }';
   }
 
-  UsersState copyWith({
+  UserState copyWith({
     User? currentUser,
   }) {
-    return UsersState(
+    return UserState(
       currentUser: currentUser ?? this.currentUser,
     );
   }
 }
 
-abstract class UsersEvents {}
+abstract class UserEvents {}
 
-class UsersIncrementEvent implements UsersEvents {}
+class UsersIncrementEvent implements UserEvents {}
 
-class UsersDecrementEvent implements UsersEvents {}
+class UsersDecrementEvent implements UserEvents {}
 
-class UsersInitializeEvent implements UsersEvents {}
+class UsersInitializeEvent implements UserEvents {}
 
-class UsersBloc {
+class UsersBloc extends Bloc<UserEvents, UserState> {
   final _userDataProvider = UserDataProvider();
-  var _state = UsersState(
-    currentUser: User(0),
-  );
 
-  final _eventController = StreamController<UsersEvents>.broadcast();
-  late final Stream<UsersState> _stateStream;
+  UsersBloc() : super(UserState(currentUser: User(0))) {
+    on<UserEvents>(
+      (event, emit) async {
+        if (event is UsersInitializeEvent) {
+          final user = await _userDataProvider.loadValue();
+          emit(UserState(currentUser: user));
+        } else if (event is UsersDecrementEvent) {
+          var user = state.currentUser;
+          user = user.copyWith(age: user.age - 1);
+          await _userDataProvider.saveValue(user);
+          emit(UserState(currentUser: user));
+        } else if (event is UsersIncrementEvent) {
+          var user = state.currentUser;
+          user = user.copyWith(age: user.age + 1);
+          await _userDataProvider.saveValue(user);
+          emit(UserState(currentUser: user));
+        }
+      },
+      transformer: sequential(),
+    );
 
-  UsersState get state => _state;
-
-  Stream<UsersState> get stream => _stateStream;
-
-  UsersBloc() {
-    _stateStream = _eventController.stream
-        .asyncExpand<UsersState>(_mapEventToState)
-        .asyncExpand(_updateState)
-        .asBroadcastStream();
-    _stateStream.listen((event) {});
-    dispatch(UsersInitializeEvent());
-  }
-
-  void dispatch(UsersEvents event) {
-    _eventController.add(event);
-  }
-
-  Stream<UsersState> _updateState(UsersState state) async* {
-    if (_state == state) return;
-    _state = state;
-    yield state;
-  }
-
-  Stream<UsersState> _mapEventToState(UsersEvents event) async* {
-    if (event is UsersInitializeEvent) {
-      final user = await _userDataProvider.loadValue();
-      yield UsersState(currentUser: user);
-    } else if (event is UsersDecrementEvent) {
-      var user = _state.currentUser;
-      user = user.copyWith(age: user.age - 1);
-      await _userDataProvider.saveValue(user);
-      yield UsersState(currentUser: user);
-    } else if (event is UsersIncrementEvent) {
-      var user = _state.currentUser;
-      user = user.copyWith(age: user.age + 1);
-      await _userDataProvider.saveValue(user);
-      yield UsersState(currentUser: user);
-    }
+    //   on<UsersInitializeEvent>((event, emit) async {
+    //     final user = await _userDataProvider.loadValue();
+    //     emit(UserState(currentUser: user));
+    //   }, transformer: sequential());
+    //
+    //   on<UsersIncrementEvent>((event, emit) async {
+    //     var user = state.currentUser;
+    //     user = user.copyWith(age: user.age + 1);
+    //     await _userDataProvider.saveValue(user);
+    //     emit(UserState(currentUser: user));
+    //   }, transformer: sequential());
+    //
+    //   on<UsersDecrementEvent>((event, emit) async {
+    //     var user = state.currentUser;
+    //     user = user.copyWith(age: user.age - 1);
+    //     await _userDataProvider.saveValue(user);
+    //     emit(UserState(currentUser: user));
+    //   }, transformer: sequential());
   }
 }

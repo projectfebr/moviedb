@@ -30,7 +30,8 @@ class _AgeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<UsersBloc>();
-    return StreamBuilder<UsersState>(
+    bloc.add(UsersInitializeEvent());
+    return StreamBuilder<UserState>(
       initialData: bloc.state,
       stream: bloc.stream,
       builder: (context, snapshot) {
@@ -48,7 +49,7 @@ class _AgeIncrementWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<UsersBloc>();
     return ElevatedButton(
-      onPressed: () => bloc.dispatch(UsersIncrementEvent()),
+      onPressed: () => bloc.add(UsersIncrementEvent()),
       child: const Text('+'),
     );
   }
@@ -61,7 +62,7 @@ class _AgeDecrementWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<UsersBloc>();
     return ElevatedButton(
-      onPressed: () => bloc.dispatch(UsersDecrementEvent()),
+      onPressed: () => bloc.add(UsersDecrementEvent()),
       child: const Text('-'),
     );
   }

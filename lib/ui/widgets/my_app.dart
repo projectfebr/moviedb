@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb/domain/blocs/users_bloc.dart';
 import 'package:moviedb/ui/widgets/example_widget.dart';
-import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -13,10 +13,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Provider<UsersBloc>(
+      home: BlocProvider<UsersBloc>(
         create: (_) => UsersBloc(),
         child: const ExampleWidget(),
-        dispose: (context, bloc) => bloc.close(),
       ),
     );
   }

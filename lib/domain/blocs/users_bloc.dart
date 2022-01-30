@@ -3,6 +3,27 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:moviedb/domain/data_providers/user_data_provider.dart';
 import 'package:moviedb/domain/entity/user.dart';
 
+abstract class SomeState {}
+
+class SomeSuccessState extends SomeState {
+  final User currentUser;
+
+  SomeSuccessState(this.currentUser);
+}
+
+class SomeFailureState extends SomeState {
+  final String error;
+
+  SomeFailureState(this.error);
+}
+
+// class SomeState {
+//   final User? currentUser;
+//   final String? error;
+//
+//   SomeState(this.currentUser, this.error);
+// }
+
 class UserState {
   final User currentUser;
 

@@ -21,12 +21,14 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  bloc: ^8.0.2
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.0.1
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^5.0.2
   http: ^0.13.3
   intl: ^0.17.0
   json_annotation: ^4.1.0
@@ -39,7 +41,7 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
-  json_serializable: ^5.0.2
+  json_serializable: ^6.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

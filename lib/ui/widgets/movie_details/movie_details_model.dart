@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moviedb/domain/api_client/api_client_exception.dart';
+import 'package:moviedb/domain/blocs/auth_bloc.dart';
 import 'package:moviedb/domain/entity/movie_details.dart';
-import 'package:moviedb/domain/services/auth_service.dart';
 import 'package:moviedb/domain/services/movie_service.dart';
 import 'package:moviedb/library/localized_model.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';

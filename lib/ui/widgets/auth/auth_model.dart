@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/api_client/api_client_exception.dart';
-import 'package:moviedb/domain/services/auth_service.dart';
+import 'package:moviedb/domain/blocs/auth_bloc.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 class AuthViewModel extends ChangeNotifier {

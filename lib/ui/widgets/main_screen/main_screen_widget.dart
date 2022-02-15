@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/domain/data_providers/session_data_provider.dart';
 import 'package:moviedb/domain/factories/screen_factory.dart';
+import 'package:moviedb/domain/services/auth_service.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -27,7 +27,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         title: const Text('TMDB'),
         actions: [
           IconButton(
-            onPressed: () => SessionDataProvider().deleteSessionId(),
+            onPressed: () {
+              AuthService().logout();
+            },
             icon: const Icon(Icons.logout),
           )
         ],

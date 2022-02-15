@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb/Theme/button_style.dart';
-import 'package:moviedb/ui/widgets/auth/auth_model.dart';
+import 'package:moviedb/ui/navigation/main_navigation.dart';
+import 'package:moviedb/ui/widgets/auth/auth_view_cubit.dart';
 import 'package:provider/provider.dart';
+
+class _AuthDataStorage {
+  String login = '';
+  String password = '';
+}
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Войти в свою учётную запись'),
-      ),
-      body: ListView(
-        children: const [
-          _HeaderWidget(),
-        ],
+    return BlocListener<AuthViewCubit, AuthViewCubitState>(
+      listenWhen: (_, current) => current is AuthViewCubitSuccessAuthState,
+      listener: _onLoaderViewCubitStateChange,
+      child: Provider(
+        create: (_) => _AuthDataStorage(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Войти в свою учётную запись'),
+          ),
+          body: ListView(
+            children: const [
+              _HeaderWidget(),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  void _onLoaderViewCubitStateChange(BuildContext context, AuthViewCubitState state) {
+    MainNavigator.resetNavigation(context);
   }
 }
 
@@ -40,12 +59,9 @@ class _HeaderWidget extends StatelessWidget {
               style: textStyle),
           const SizedBox(height: 5),
           TextButton(
-              style: AppButtonStyle.linkButton,
-              onPressed: () {},
-              child: const Text('Регистрация')),
+              style: AppButtonStyle.linkButton, onPressed: () {}, child: const Text('Регистрация')),
           const SizedBox(height: 25),
-          Text(
-              'Если Вы зарегистрировались, но не получили письмо для подтверждения.',
+          Text('Если Вы зарегистрировались, но не получили письмо для подтверждения.',
               style: textStyle),
           const SizedBox(height: 5),
           TextButton(
@@ -63,7 +79,7 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<AuthViewModel>();
+    final model = context.read<_AuthDataStorage>();
     const textStyle = TextStyle(fontSize: 16, color: Color(0xff212529));
     const textFieldDecorator = InputDecoration(
       border: OutlineInputBorder(
@@ -86,8 +102,8 @@ class _FormWidget extends StatelessWidget {
           height: 5,
         ),
         TextField(
-          controller: model.loginTextController,
           decoration: textFieldDecorator,
+          onChanged: (text) => model.login = text,
         ),
         const SizedBox(
           height: 20,
@@ -100,9 +116,9 @@ class _FormWidget extends StatelessWidget {
           height: 5,
         ),
         TextField(
-          controller: model.passTextController,
           obscureText: true,
           decoration: textFieldDecorator,
+          onChanged: (text) => model.password = text,
         ),
         const SizedBox(
           height: 25,
@@ -130,9 +146,18 @@ class _AuthButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<AuthViewModel>();
-    final onPressed = model.canStartAuth ? () => model.auth(context) : null;
-    final child = model.isAuthProgress
+    final cubit = context.watch<AuthViewCubit>();
+    final storage = context.read<_AuthDataStorage>();
+
+    final canStartAuth = cubit.state is AuthViewCubitFormFillInProgressState ||
+        cubit.state is AuthViewCubitErrorState;
+    final onPressed = canStartAuth
+        ? () => cubit.auth(
+              login: storage.login,
+              password: storage.password,
+            )
+        : null;
+    final child = cubit is AuthViewCubitAuthProgressState
         ? const SizedBox(
             width: 15,
             height: 15,
@@ -162,7 +187,12 @@ class _ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = context.select((AuthViewModel vm) => vm.errorMesage);
+    // return BlocBuilder<AuthViewCubit, AuthViewCubitState>(builder: (context, state) {});
+    final errorMessage = context.select((AuthViewCubit cubit) {
+      final state = cubit.state;
+      return state is AuthViewCubitErrorState ? state.errorMessage : null;
+    });
+
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),

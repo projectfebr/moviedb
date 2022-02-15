@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb/ui/navigation/main_navigation.dart';
-import 'package:moviedb/ui/widgets/loader/loader_view_model.dart';
+import 'package:moviedb/ui/widgets/loader_widget/loader_view_cubit.dart';
 
 class LoaderWidget extends StatelessWidget {
   const LoaderWidget({Key? key}) : super(key: key);

@@ -17,8 +17,6 @@ class AuthLoginEvent extends AuthEvent {
   AuthLoginEvent({required this.login, required this.password});
 }
 
-enum AuthStateStatus { authorized, notAuthorized, inProgress }
-
 abstract class AuthState {}
 
 class AuthUnauthorizedState extends AuthState {
@@ -91,6 +89,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> onAuthCheckStatusEvent(AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
+    emit(AuthProgressState());
     final sessionId = await _sessionDataProvider.getSessionId();
     final newState = sessionId != null ? AuthAuthorizedState() : AuthUnauthorizedState();
     emit(newState);
@@ -98,6 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> onAuthLoginEvent(AuthLoginEvent event, Emitter<AuthState> emit) async {
     try {
+      emit(AuthProgressState());
       final sessionId = await _authApiClient.auth(username: event.login, password: event.password);
       final accountId = await _accountApiClient.getAccountInfo(sessionId);
       await _sessionDataProvider.setSessionId(sessionId);

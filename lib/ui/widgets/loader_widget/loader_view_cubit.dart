@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:moviedb/domain/blocs/auth_bloc.dart';
-import 'package:moviedb/ui/navigation/main_navigation.dart';
 
 enum LoaderViewCubitState { authorized, notAuthorized, unknown }
 
@@ -15,12 +13,18 @@ class LoaderViewCubit extends Cubit<LoaderViewCubitState> {
     LoaderViewCubitState initialState,
     this.authBloc,
   ) : super(initialState) {
-    authBloc.add(AuthCheckStatusEvent());
-    onState(authBloc.state);
-    authBlocSubscription = authBloc.stream.listen(onState);
+    Future.microtask(() {
+      if (authBloc.state is AuthAuthorizedState) {
+        emit(LoaderViewCubitState.authorized);
+      } else {
+        _onState(authBloc.state);
+        authBlocSubscription = authBloc.stream.listen(_onState);
+        authBloc.add(AuthCheckStatusEvent());
+      }
+    });
   }
 
-  void onState(AuthState state) {
+  void _onState(AuthState state) {
     if (state is AuthAuthorizedState) {
       emit(LoaderViewCubitState.authorized);
     } else if (state is AuthUnauthorizedState) {
@@ -32,25 +36,5 @@ class LoaderViewCubit extends Cubit<LoaderViewCubitState> {
   Future<void> close() {
     authBlocSubscription.cancel();
     return super.close();
-  }
-}
-
-class LoaderViewModel {
-  final BuildContext context;
-  final _authService = AuthService();
-
-  LoaderViewModel(this.context) {
-    asyncInit();
-  }
-
-  Future<void> asyncInit() async {
-    await checkAuth();
-  }
-
-  Future<void> checkAuth() async {
-    final isAuth = await _authService.isAuth();
-    final nextScreen = isAuth ? MainNavigationRouteNames.mainScreen : MainNavigationRouteNames.auth;
-
-    Navigator.of(context).pushReplacementNamed(nextScreen);
   }
 }
